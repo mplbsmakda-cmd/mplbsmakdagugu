@@ -47,7 +47,11 @@ export function Sidebar({ className, role }: SidebarProps) {
                 </div>
             </div>
             <div className="absolute bottom-4 w-full px-3">
-                <Button variant="ghost" className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10">
+                <Button
+                    variant="ghost"
+                    className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10"
+                    onClick={() => window.location.href = '/login'}
+                >
                     <LogOut className="mr-2 h-4 w-4" />
                     Logout
                 </Button>

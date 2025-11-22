@@ -1,96 +1,194 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, ClipboardList, FileText, Clock } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Calendar, Clock, Users, FileText, TrendingUp, BookOpen, Award } from "lucide-react";
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 export default function TeacherDashboard() {
+    const scheduleToday = [
+        { time: "07:00 - 08:30", class: "X MPLB 1", subject: "Otomatisasi Perkantoran", room: "Lab Komputer" },
+        { time: "08:30 - 10:00", class: "XI MPLB 1", subject: "Korespondensi", room: "Ruang 201" },
+        { time: "10:30 - 12:00", class: "X MPLB 2", subject: "Otomatisasi Perkantoran", room: "Lab Komputer" },
+    ];
+
+    const assignmentStats = [
+        { class: 'X MPLB 1', submitted: 28, total: 32 },
+        { class: 'X MPLB 2', submitted: 25, total: 30 },
+        { class: 'XI MPLB 1', submitted: 29, total: 31 },
+    ];
+
+    const gradeProgress = [
+        { week: 'W1', avg: 78 },
+        { week: 'W2', avg: 80 },
+        { week: 'W3', avg: 82 },
+        { week: 'W4', avg: 85 },
+        { week: 'W5', avg: 84 },
+    ];
+
     return (
         <div className="space-y-6">
-            <h1 className="text-3xl font-bold tracking-tight">Dashboard Guru</h1>
+            <div className="flex items-center justify-between">
+                <div>
+                    <h1 className="text-3xl font-bold tracking-tight">Dashboard Guru</h1>
+                    <p className="text-muted-foreground">Selamat datang kembali, Budi Santoso, S.Pd</p>
+                </div>
+                <div className="text-sm text-muted-foreground">
+                    <p className="font-medium">Hari ini: Rabu, 22 Nov 2023</p>
+                </div>
+            </div>
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {/* Stats Cards */}
+            <div className="grid gap-4 md:grid-cols-4">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Jadwal Hari Ini</CardTitle>
-                        <Calendar className="h-4 w-4 text-muted-foreground" />
+                        <CardTitle className="text-sm font-medium">Kelas Diampu</CardTitle>
+                        <Users className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">3 Kelas</div>
-                        <p className="text-xs text-muted-foreground">07:00 - 14:00</p>
+                        <div className="text-2xl font-bold">3</div>
+                        <p className="text-xs text-muted-foreground">93 total siswa</p>
                     </CardContent>
                 </Card>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Tugas Masuk</CardTitle>
+                        <CardTitle className="text-sm font-medium">Tugas Aktif</CardTitle>
                         <FileText className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">24</div>
-                        <p className="text-xs text-muted-foreground">Perlu diperiksa</p>
+                        <div className="text-2xl font-bold">5</div>
+                        <p className="text-xs text-muted-foreground">2 deadline hari ini</p>
                     </CardContent>
                 </Card>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Kehadiran</CardTitle>
-                        <ClipboardList className="h-4 w-4 text-muted-foreground" />
+                        <CardTitle className="text-sm font-medium">Rata-rata Kelas</CardTitle>
+                        <TrendingUp className="h-4 w-4 text-green-600" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">98%</div>
-                        <p className="text-xs text-muted-foreground">Rata-rata minggu ini</p>
+                        <div className="text-2xl font-bold text-green-600">84.5</div>
+                        <p className="text-xs text-muted-foreground">+3.2 dari bulan lalu</p>
                     </CardContent>
                 </Card>
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">Jam Mengajar</CardTitle>
-                        <Clock className="h-4 w-4 text-muted-foreground" />
+                        <CardTitle className="text-sm font-medium">Pesan Baru</CardTitle>
+                        <Award className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">24 Jam</div>
-                        <p className="text-xs text-muted-foreground">Total minggu ini</p>
+                        <div className="text-2xl font-bold text-red-600">3</div>
+                        <p className="text-xs text-muted-foreground">Dari orang tua siswa</p>
                     </CardContent>
                 </Card>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2">
+            {/* Charts Row */}
+            <div className="grid gap-4 md:grid-cols-2">
+                {/* Assignment Submission Stats */}
                 <Card>
                     <CardHeader>
-                        <CardTitle>Jadwal Mengajar Hari Ini</CardTitle>
+                        <CardTitle>Status Pengumpulan Tugas</CardTitle>
+                        <CardDescription>Per kelas yang diampu</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className="space-y-4">
-                            {[
-                                { time: "07:00 - 08:30", class: "X MPLB 1", subject: "Dasar Manajemen" },
-                                { time: "08:45 - 10:15", class: "XI MPLB 2", subject: "Kearsipan" },
-                                { time: "10:30 - 12:00", class: "XII MPLB 1", subject: "Layanan Bisnis" },
-                            ].map((item, i) => (
-                                <div key={i} className="flex items-center justify-between p-4 border rounded-lg">
-                                    <div>
-                                        <p className="font-medium">{item.subject}</p>
-                                        <p className="text-sm text-muted-foreground">{item.class}</p>
+                        <ResponsiveContainer width="100%" height={250}>
+                            <BarChart data={assignmentStats}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="class" />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="submitted" fill="#10b981" name="Sudah Mengumpulkan" />
+                                <Bar dataKey="total" fill="#e5e7eb" name="Total Siswa" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </CardContent>
+                </Card>
+
+                {/* Grade Progress Trend */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Trend Nilai 5 Minggu Terakhir</CardTitle>
+                        <CardDescription>Rata-rata semua kelas</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <ResponsiveContainer width="100%" height={250}>
+                            <LineChart data={gradeProgress}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="week" />
+                                <YAxis domain={[70, 90]} />
+                                <Tooltip />
+                                <Legend />
+                                <Line
+                                    type="monotone"
+                                    dataKey="avg"
+                                    stroke="#3b82f6"
+                                    strokeWidth={2}
+                                    name="Rata-rata"
+                                />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </CardContent>
+                </Card>
+            </div>
+
+            {/* Today's Schedule and Quick Actions */}
+            <div className="grid gap-4 md:grid-cols-2">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Jadwal Hari Ini</CardTitle>
+                        <CardDescription>Rabu, 22 November 2023</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-3">
+                            {scheduleToday.map((schedule, i) => (
+                                <div key={i} className="flex items-start gap-4 p-3 border rounded-lg hover:bg-muted/50 transition-colors">
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                                        <Clock className="h-5 w-5 text-primary" />
                                     </div>
-                                    <div className="text-sm font-medium bg-secondary/20 text-secondary-foreground px-2 py-1 rounded">
-                                        {item.time}
+                                    <div className="flex-1">
+                                        <p className="text-sm font-medium">{schedule.time}</p>
+                                        <p className="text-sm text-muted-foreground">{schedule.class} - {schedule.subject}</p>
+                                        <p className="text-xs text-muted-foreground">{schedule.room}</p>
                                     </div>
                                 </div>
                             ))}
                         </div>
                     </CardContent>
                 </Card>
+
                 <Card>
                     <CardHeader>
                         <CardTitle>Aksi Cepat</CardTitle>
+                        <CardDescription>Fitur yang sering digunakan</CardDescription>
                     </CardHeader>
-                    <CardContent className="grid gap-4">
-                        <Button className="w-full justify-start" variant="outline">
-                            <ClipboardList className="mr-2 h-4 w-4" /> Input Absensi Hari Ini
-                        </Button>
-                        <Button className="w-full justify-start" variant="outline">
-                            <FileText className="mr-2 h-4 w-4" /> Input Nilai Tugas
-                        </Button>
-                        <Button className="w-full justify-start" variant="outline">
-                            <Calendar className="mr-2 h-4 w-4" /> Lihat Kalender Akademik
-                        </Button>
+                    <CardContent className="grid gap-3">
+                        <a href="/dashboard/teacher/attendance" className="flex items-center gap-4 rounded-md border p-4 hover:bg-muted/50 transition-colors">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100">
+                                <Calendar className="h-5 w-5 text-blue-600" />
+                            </div>
+                            <div className="flex-1">
+                                <p className="text-sm font-medium">Input Absensi</p>
+                                <p className="text-xs text-muted-foreground">Catat kehadiran siswa</p>
+                            </div>
+                        </a>
+                        <a href="/dashboard/teacher/assignments" className="flex items-center gap-4 rounded-md border p-4 hover:bg-muted/50 transition-colors">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100">
+                                <FileText className="h-5 w-5 text-green-600" />
+                            </div>
+                            <div className="flex-1">
+                                <p className="text-sm font-medium">Kelola Tugas</p>
+                                <p className="text-xs text-muted-foreground">Buat & cek tugas</p>
+                            </div>
+                        </a>
+                        <a href="/dashboard/teacher/grades" className="flex items-center gap-4 rounded-md border p-4 hover:bg-muted/50 transition-colors">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-100">
+                                <BookOpen className="h-5 w-5 text-yellow-600" />
+                            </div>
+                            <div className="flex-1">
+                                <p className="text-sm font-medium">Input Nilai</p>
+                                <p className="text-xs text-muted-foreground">Update nilai siswa</p>
+                            </div>
+                        </a>
                     </CardContent>
                 </Card>
             </div>
