@@ -12,22 +12,22 @@ import { loginUser } from "@/lib/auth";
 
 export default function LoginPage() {
     const router = useRouter();
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!username || !password) {
-            toast.error("Username dan password harus diisi");
+        if (!email || !password) {
+            toast.error("Email dan password harus diisi");
             return;
         }
 
         setIsLoading(true);
 
         try {
-            const { user, session, error } = await loginUser(username, password);
+            const { user, session, error } = await loginUser(email, password);
 
             if (error || !user || !session) {
                 toast.error(error || "Login gagal");
@@ -60,17 +60,17 @@ export default function LoginPage() {
                 <CardContent className="pb-8">
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="space-y-2">
-                            <Label htmlFor="username" className="text-sm font-medium">
-                                Username
+                            <Label htmlFor="email" className="text-sm font-medium">
+                                Email
                             </Label>
                             <Input
-                                id="username"
-                                type="text"
-                                placeholder="Masukkan username"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                id="email"
+                                type="email"
+                                placeholder="Masukkan email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 disabled={isLoading}
-                                autoComplete="username"
+                                autoComplete="email"
                                 className="h-11"
                             />
                         </div>
@@ -115,19 +115,19 @@ export default function LoginPage() {
                         <div className="grid grid-cols-2 gap-2 text-xs">
                             <div className="bg-muted/50 p-2.5 rounded">
                                 <p className="font-medium text-foreground">Admin</p>
-                                <p className="text-muted-foreground">admin</p>
+                                <p className="text-muted-foreground">admin@example.com</p>
                             </div>
                             <div className="bg-muted/50 p-2.5 rounded">
                                 <p className="font-medium text-foreground">Guru</p>
-                                <p className="text-muted-foreground">guru01</p>
+                                <p className="text-muted-foreground">guru01@example.com</p>
                             </div>
                             <div className="bg-muted/50 p-2.5 rounded">
                                 <p className="font-medium text-foreground">Siswa</p>
-                                <p className="text-muted-foreground">siswa01</p>
+                                <p className="text-muted-foreground">siswa01@example.com</p>
                             </div>
                             <div className="bg-muted/50 p-2.5 rounded">
                                 <p className="font-medium text-foreground">Wali</p>
-                                <p className="text-muted-foreground">wali01</p>
+                                <p className="text-muted-foreground">wali01@example.com</p>
                             </div>
                         </div>
                         <p className="text-center text-xs text-muted-foreground mt-3">

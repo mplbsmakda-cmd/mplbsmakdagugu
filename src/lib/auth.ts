@@ -13,31 +13,30 @@ export interface User {
 /**
  * Login user dengan Supabase Auth (SECURE)
  */
-export async function loginUser(username: string, password: string) {
+export async function loginUser(email: string, password: string) {
     try {
-        // 1. Query user dari database untuk mendapatkan email dan role
-        const { data: userData, error: queryError } = await supabase
-            .from('users')
-            .select('id, username, email, role, full_name')
-            .eq('username', username)
-            .single();
-
-        if (queryError || !userData) {
-            return { user: null, session: null, error: 'Username tidak ditemukan' };
-        }
-
-        // 2. Login menggunakan Supabase Auth dengan email
-        // Supabase Auth menggunakan email sebagai identifier
+        // Login menggunakan Supabase Auth dengan email dan password
         const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-            email: userData.email,
+            email: email,
             password: password,
         });
 
         if (authError || !authData.session) {
-            return { user: null, session: null, error: 'Password salah' };
+            return { user: null, session: null, error: 'Email atau password salah' };
         }
 
-        // 3. Return user data dengan session dari Supabase
+        // Ambil data user dari tabel users berdasarkan email
+        const { data: userData, error: queryError } = await supabase
+            .from('users')
+            .select('id, username, email, role, full_name')
+            .eq('email', email)
+            .single();
+
+        if (queryError || !userData) {
+            return { user: null, session: null, error: 'Data pengguna tidak ditemukan' };
+        }
+
+        // Return data user beserta session
         const user: User = {
             id: userData.id,
             username: userData.username,
