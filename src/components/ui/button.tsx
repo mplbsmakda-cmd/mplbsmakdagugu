@@ -37,6 +37,9 @@ const buttonVariants = cva(
   }
 )
 
+// Add MotionSlot as motion-wrapped Radix Slot
+const MotionSlot = motion(Slot);
+
 function Button({
   className,
   variant,
@@ -47,7 +50,8 @@ function Button({
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean
   }) {
-  const Comp = asChild ? motion.custom(Slot) : motion.button;
+  // Use MotionSlot if asChild, else motion.button
+  const Comp = asChild ? MotionSlot : motion.button;
 
   return (
     <Comp
