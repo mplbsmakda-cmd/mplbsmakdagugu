@@ -5,29 +5,22 @@ export function middleware(request: NextRequest) {
     // Get the pathname
     const path = request.nextUrl.pathname;
 
-    // Define public paths that don't require authentication
-    const publicPaths = ['/', '/login'];
-    const isPublicPath = publicPaths.includes(path);
-
-    // Define protected paths (all dashboard routes)
-    const isProtectedPath = path.startsWith('/dashboard');
-
     // Get auth token from cookies
     const token = request.cookies.get('sb-access-token')?.value ||
         request.cookies.get('sb-refresh-token')?.value;
 
-    // Redirect logic
-    if (isProtectedPath && !token) {
-        // Not authenticated, redirect to login
+    // Protected paths check - redirect to login if not authenticated
+    if (path.startsWith('/dashboard') && !token) {
         return NextResponse.redirect(new URL('/login', request.url));
     }
 
-    if (isPublicPath && token && path === '/login') {
-        // Already authenticated, redirect to dashboard
-        // Default to admin dashboard (you can customize this)
+    // Login page - redirect to dashboard if already authenticated
+    // This prevents authenticated users from seeing the login page
+    if (path === '/login' && token) {
         return NextResponse.redirect(new URL('/dashboard/admin', request.url));
     }
 
+    // Allow all other requests to proceed
     return NextResponse.next();
 }
 

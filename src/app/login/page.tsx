@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,26 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Loader2, Lock } from "lucide-react";
 import { toast } from "sonner";
-import { loginUser, isAuthenticated } from "@/lib/auth";
+import { loginUser } from "@/lib/auth";
 
 export default function LoginPage() {
     const router = useRouter();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [isCheckingAuth, setIsCheckingAuth] = useState(true);
-
-    // Check if already logged in
-    useEffect(() => {
-        const checkAuth = async () => {
-            const authenticated = await isAuthenticated();
-            if (authenticated) {
-                router.push('/dashboard/admin');
-            }
-            setIsCheckingAuth(false);
-        };
-        checkAuth();
-    }, [router]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -49,21 +36,14 @@ export default function LoginPage() {
             }
 
             toast.success(`Selamat datang, ${user.full_name}`);
-            router.push(`/dashboard/${user.role}`);
+            // Use replace instead of push for faster redirect without adding to history
+            router.replace(`/dashboard/${user.role}`);
         } catch (error) {
             console.error('Login error:', error);
             toast.error("Terjadi kesalahan saat login");
             setIsLoading(false);
         }
     };
-
-    if (isCheckingAuth) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800">
-                <Loader2 className="h-8 w-8 animate-spin text-white" />
-            </div>
-        );
-    }
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 p-4">
