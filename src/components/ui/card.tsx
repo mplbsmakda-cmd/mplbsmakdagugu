@@ -1,15 +1,20 @@
 import * as React from "react"
+import { motion } from "framer-motion";
 
 import { cn } from "@/lib/utils"
 
 function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div
+    <motion.div
       data-slot="card"
       className={cn(
         "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
         className
       )}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ type: "spring", stiffness: 260, damping: 20 }}
       {...props}
     />
   )
