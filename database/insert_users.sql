@@ -13,8 +13,8 @@ INSERT INTO users (id, username, email, password_hash, role, full_name) VALUES
 ON CONFLICT (username) DO NOTHING;
 
 -- Instructions:
--- 1. Use the Supabase Dashboard or Supabase Auth API to create each user with the corresponding email and password:
---    Example password for all users: 'password123'
--- 2. Creating users via SQL only adds them to the 'users' table and does NOT create credentials in Supabase Auth
--- 3. To create users with passwords in Supabase Auth, use the Supabase Dashboard "Authentication" > "Users" panel or
---    use the Supabase JavaScript client or REST API with `auth.signUp()` method.
+-- 1. Gunakan Dashboard Supabase atau API Auth untuk membuat setiap pengguna dengan email dan password yang sama:
+--    Contoh password untuk semua pengguna: 'password123'
+-- 2. Menjalankan query SQL ini hanya menambahkan data pengguna ke tabel 'users' dan TIDAK membuat kredensial di Supabase Auth
+-- 3. Untuk membuat pengguna dengan password di Supabase Auth, gunakan panel "Authentication" > "Users" di Dashboard Supabase atau
+--    gunakan Supabase JavaScript client atau REST API dengan metode `auth.signUp()`.

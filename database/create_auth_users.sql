@@ -1,4 +1,4 @@
--- ============================================
+--=== =========================================
 -- CREATE SUPABASE AUTH USERS
 -- Run this in Supabase SQL Editor AFTER schema.sql
 -- ============================================
@@ -29,7 +29,7 @@ INSERT INTO auth.users (
 )
 VALUES (
   'a1111111-1111-1111-1111-111111111111',
-  'admin@smk.sch.id',
+  'admin@example.com',
   crypt('password123', gen_salt('bf')),
   now(),
   now(),
